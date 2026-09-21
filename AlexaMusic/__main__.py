@@ -11,6 +11,10 @@ as you want or you can collabe if you have new ideas.
 
 import asyncio
 import importlib
+import os
+import threading
+from flask import Flask
+
 from typing import Any
 
 from pyrogram import idle
@@ -61,6 +65,38 @@ async def init() -> None:
     await app.stop()
     await userbot.stop()
     LOGGER("AlexaMusic").info("Stopping Alexa Music Bot...")
+
+
+
+
+# ============================================================
+#                    HEALTH SERVER FOR UPTIMEROBOT
+# ============================================================
+
+flask_app = Flask(__name__)
+
+@flask_app.route("/")
+def home():
+    return "🤖 Alexa Music Bot is running!", 200
+
+@flask_app.route("/health")
+def health():
+    return "OK", 200
+
+def run_flask():
+    port = int(os.environ.get("PORT", 10000))
+    flask_app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False,
+        use_reloader=False
+    )
+
+# Flask server ko background thread me chalao
+flask_thread = threading.Thread(target=run_flask, daemon=True)
+flask_thread.start()
+
+print(f"✅ Health server started on port {os.environ.get('PORT', 10000)}")
 
 
 if __name__ == "__main__":
