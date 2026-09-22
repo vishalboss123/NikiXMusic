@@ -26,11 +26,7 @@ from AlexaMusic.utils.formatters import time_to_seconds
 
 
 def cookiefile():
-    cookie_dir = "cookies"
-    cookies_files = [f for f in os.listdir(cookie_dir) if f.endswith(".txt")]
-
-    return os.path.join(cookie_dir, cookies_files[0])
-
+    return "cookies.txt"
 
 async def shell_cmd(cmd):
     proc = await asyncio.create_subprocess_shell(
