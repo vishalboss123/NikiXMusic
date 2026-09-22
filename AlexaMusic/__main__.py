@@ -73,6 +73,12 @@ async def init() -> None:
 #                    HEALTH SERVER FOR UPTIMEROBOT
 # ============================================================
 
+# ============================================================
+#                    HEALTH SERVER FOR UPTIMEROBOT
+# ============================================================
+
+
+
 flask_app = Flask(__name__)
 
 @flask_app.route("/")
@@ -85,11 +91,13 @@ def health():
 
 def run_flask():
     port = int(os.environ.get("PORT", 10000))
+    print(f"🌐 Starting Flask on port {port}")
     flask_app.run(
         host="0.0.0.0",
         port=port,
         debug=False,
-        use_reloader=False
+        use_reloader=False,
+        threaded=True
     )
 
 # Flask server ko background thread me chalao
@@ -97,6 +105,11 @@ flask_thread = threading.Thread(target=run_flask, daemon=True)
 flask_thread.start()
 
 print(f"✅ Health server started on port {os.environ.get('PORT', 10000)}")
+
+
+if __name__ == "__main__":
+    asyncio.get_event_loop().run_until_complete(init())
+    LOGGER("AlexaMusic").info("Stopping Music Bot")
 
 
 if __name__ == "__main__":
