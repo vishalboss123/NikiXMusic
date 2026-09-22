@@ -3,6 +3,12 @@
 if [ -n "$YOUTUBE_COOKIES" ]; then
     printf '%s' "$YOUTUBE_COOKIES" > cookies.txt
     echo "YouTube cookies.txt created successfully."
+
+    echo "First line:"
+    head -n 1 cookies.txt
+
+    echo "File type:"
+    file cookies.txt
 else
     echo "WARNING: YOUTUBE_COOKIES is not set."
 fi
