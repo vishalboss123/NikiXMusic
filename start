@@ -1,1 +1,10 @@
+#!/bin/bash
+
+if [ -n "$YOUTUBE_COOKIES" ]; then
+    printf '%s' "$YOUTUBE_COOKIES" > cookies.txt
+    echo "YouTube cookies.txt created successfully."
+else
+    echo "WARNING: YOUTUBE_COOKIES is not set."
+fi
+
 python3 -m AlexaMusic
