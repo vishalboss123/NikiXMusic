@@ -35,20 +35,24 @@ async def save_file(content: str, file_path: str):
 
 
 async def save_cookies():
-    full_url: str = str(config.COOKIES)
-    paste_id: str = full_url.split("/")[-1]
-    pastebin_url: str = f"https://batbin.me/raw/{paste_id}"
-
-    async with aiohttp.ClientSession() as session:
-        content = await fetch_content(session, pastebin_url)
-
-        if content:
-            file_path = "cookies/cookies.txt"
-            saved_path = await save_file(content, file_path)
-
-            if saved_path and os.path.getsize(saved_path) > 0:
-                LOGGER(__name__).info(f"Cookies saved successfully to {saved_path}.")
-            else:
-                LOGGER(__name__).error("Failed to save cookies or the file is empty.")
-        else:
-            LOGGER(__name__).error("Failed to fetch cookies.")
+    """
+    Cookies file ko Netscape format me save karo.
+    Agar file already exist karti hai toh usko touch mat karo.
+    """
+    import os
+    
+    file_path = "cookies/cookies.txt"
+    
+    # Agar file already exist karti hai aur non-empty hai, toh kuch mat karo
+    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+        LOGGER(__name__).info("Cookies file already exists, skipping save.")
+        return
+    
+    # Agar nahi hai toh empty Netscape format file banao
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+    with open(file_path, "w") as f:
+        f.write("# Netscape HTTP Cookie File\n")
+        f.write("# https://curl.haxx.se/rfc/cookie_spec.html\n")
+        f.write("# This is a generated file! Do not edit.\n")
+    
+    LOGGER(__name__).info("Empty cookies file created.")
