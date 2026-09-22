@@ -27,7 +27,7 @@ from AlexaMusic.core.call import Alexa
 from AlexaMusic.misc import sudo
 from AlexaMusic.plugins import ALL_MODULES
 from AlexaMusic.utils.database import get_banned_users, get_gbanned
-from AlexaMusic.core.cookies import save_cookies
+
 
 
 async def init() -> None:
@@ -44,7 +44,7 @@ async def init() -> None:
     except Exception:
         pass
     await app.start()
-    await save_cookies()
+    
     for module in ALL_MODULES:
         importlib.import_module(f"AlexaMusic.plugins{module}")
     LOGGER("AlexaMusic.plugins").info("Necessary Modules Imported Successfully.")
