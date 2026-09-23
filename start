@@ -4,11 +4,36 @@ if [ -n "$YOUTUBE_COOKIES" ]; then
     printf '%s' "$YOUTUBE_COOKIES" > cookies.txt
     echo "YouTube cookies.txt created successfully."
 
-    echo "First line:"
-    head -n 1 cookies.txt
+    python3 - <<'PY'
+from pathlib import Path
 
-    echo "File type:"
-    file cookies.txt
+p = Path("cookies.txt")
+
+print("Cookie file exists:", p.exists())
+
+if p.exists():
+    lines = p.read_text(encoding="utf-8", errors="replace").splitlines()
+
+    print("Cookie first line:", repr(lines[0] if lines else "<empty>"))
+
+    data_lines = [
+        line for line in lines
+        if line.strip() and not line.startswith("#")
+    ]
+
+    print("Cookie data lines:", len(data_lines))
+
+    if data_lines:
+        print("First cookie line field count:", len(data_lines[0].split("\t")))
+
+    print(
+        "Looks like JSON:",
+        bool(lines and lines[0].lstrip().startswith(("[", "{")))
+    )
+else:
+    print("ERROR: cookies.txt was not created.")
+PY
+
 else
     echo "WARNING: YOUTUBE_COOKIES is not set."
 fi
