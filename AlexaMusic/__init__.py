@@ -34,7 +34,7 @@ if sys.platform != "win32":
 dirr()
 
 # Check Git Updates
-git()
+#git()
 
 # Initialize Memory DB
 dbb()
