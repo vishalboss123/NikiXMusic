@@ -5,31 +5,63 @@
 TheTeamAlexa is a project of Telegram bots with variety of purposes.
 Copyright (c) 2021 ~ Present Team Alexa <https://github.com/TheTeamAlexa>
 
-This program is free software: you can redistribute it and can modify
-as you want or you can collabe if you have new ideas.
+This program is free software: you can redistribute it and modify
+as you want or you can collaborate if you have new ideas.
 """
 
 import config
+
 from pyrogram.types import InlineKeyboardButton
+from AlexaMusic.utils.stylish import EMOJI_IDS, stylish_button
+
+
+def btn(text, callback_data=None, emoji_name=None, url=None):
+    button_args = {
+        "text": stylish_button(text),
+    }
+
+    if callback_data is not None:
+        button_args["callback_data"] = callback_data
+
+    if url is not None:
+        button_args["url"] = url
+
+    emoji_id = EMOJI_IDS.get(emoji_name) if emoji_name else None
+
+    if emoji_id:
+        button_args["icon_custom_emoji_id"] = emoji_id
+
+    try:
+        return InlineKeyboardButton(**button_args)
+    except TypeError:
+        button_args.pop("icon_custom_emoji_id", None)
+        return InlineKeyboardButton(**button_args)
 
 
 def song_markup(_, vidid):
     return [
         [
-            InlineKeyboardButton(
-                text=_["SG_B_2"],
-                callback_data=f"song_helper audio|{vidid}",
+            btn(
+                _["SG_B_2"],
+                f"song_helper audio|{vidid}",
+                "audio",
             ),
-            InlineKeyboardButton(
-                text=_["SG_B_3"],
-                callback_data=f"song_helper video|{vidid}",
+            btn(
+                _["SG_B_3"],
+                f"song_helper video|{vidid}",
+                "stream",
             ),
         ],
         [
-            InlineKeyboardButton(
-                text="🌻 sᴜᴩᴩᴏʀᴛ 🌻",
+            btn(
+                "🌻 sᴜᴩᴩᴏʀᴛ 🌻",
                 url=config.SUPPORT_GROUP,
+                emoji_name="group",
             ),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+            btn(
+                _["CLOSE_BUTTON"],
+                "close",
+                "stop",
+            ),
         ],
     ]
