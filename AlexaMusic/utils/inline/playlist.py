@@ -5,37 +5,56 @@
 TheTeamAlexa is a project of Telegram bots with variety of purposes.
 Copyright (c) 2021 ~ Present Team Alexa <https://github.com/TheTeamAlexa>
 
-This program is free software: you can redistribute it and can modify
-as you want or you can collabe if you have new ideas.
+This program is free software: you can redistribute it and modify
+as you want or collaborate if you have new ideas.
 """
 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from AlexaMusic.utils.stylish import EMOJI_IDS, stylish_button
+
+
+def btn(text, callback_data, emoji_name=None):
+    """Create stylish button with optional Premium custom emoji icon."""
+
+    button_args = {
+        "text": stylish_button(text),
+        "callback_data": callback_data,
+    }
+
+    emoji_id = EMOJI_IDS.get(emoji_name) if emoji_name else None
+
+    if emoji_id:
+        button_args["icon_custom_emoji_id"] = emoji_id
+
+    try:
+        return InlineKeyboardButton(**button_args)
+    except TypeError:
+        # Compatibility fallback for Pyrogram forks
+        button_args.pop("icon_custom_emoji_id", None)
+        return InlineKeyboardButton(**button_args)
 
 
 def botplaylist_markup(_):
     return [
         [
-            InlineKeyboardButton(
-                text=_["PL_B_1"],
-                callback_data="get_playlist_playmode",
-            ),
-            InlineKeyboardButton(text=_["PL_B_8"], callback_data="get_top_playlists"),
+            btn(_["PL_B_1"], "get_playlist_playmode", "playlist"),
+            btn(_["PL_B_8"], "get_top_playlists", "star"),
         ],
         [
-            InlineKeyboardButton(text=_["PL_B_4"], callback_data="PM"),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+            btn(_["PL_B_4"], "PM", "settings"),
+            btn(_["CLOSE_BUTTON"], "close", "stop"),
         ],
     ]
 
 
 def top_play_markup(_):
     return [
-        [InlineKeyboardButton(text=_["PL_B_9"], callback_data="SERVERTOP global")],
-        [InlineKeyboardButton(text=_["PL_B_10"], callback_data="SERVERTOP chat")],
-        [InlineKeyboardButton(text=_["PL_B_11"], callback_data="SERVERTOP user")],
+        [btn(_["PL_B_9"], "SERVERTOP global", "users")],
+        [btn(_["PL_B_10"], "SERVERTOP chat", "group")],
+        [btn(_["PL_B_11"], "SERVERTOP user", "owner")],
         [
-            InlineKeyboardButton(text=_["BACK_BUTTON"], callback_data="get_playmarkup"),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+            btn(_["BACK_BUTTON"], "get_playmarkup", "backward"),
+            btn(_["CLOSE_BUTTON"], "close", "stop"),
         ],
     ]
 
@@ -43,24 +62,24 @@ def top_play_markup(_):
 def get_playlist_markup(_):
     return [
         [
-            InlineKeyboardButton(text=_["P_B_1"], callback_data="play_playlist a"),
-            InlineKeyboardButton(text=_["P_B_2"], callback_data="play_playlist b"),
+            btn(_["P_B_1"], "play_playlist a", "play"),
+            btn(_["P_B_2"], "play_playlist b", "playlist"),
         ],
         [
-            InlineKeyboardButton(text=_["BACK_BUTTON"], callback_data="home_play"),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+            btn(_["BACK_BUTTON"], "home_play", "backward"),
+            btn(_["CLOSE_BUTTON"], "close", "stop"),
         ],
     ]
 
 
 def top_play_markup(_):
     return [
-        [InlineKeyboardButton(text=_["PL_B_9"], callback_data="SERVERTOP Global")],
-        [InlineKeyboardButton(text=_["PL_B_10"], callback_data="SERVERTOP Group")],
-        [InlineKeyboardButton(text=_["PL_B_11"], callback_data="SERVERTOP Personal")],
+        [btn(_["PL_B_9"], "SERVERTOP Global", "users")],
+        [btn(_["PL_B_10"], "SERVERTOP Group", "group")],
+        [btn(_["PL_B_11"], "SERVERTOP Personal", "owner")],
         [
-            InlineKeyboardButton(text=_["BACK_BUTTON"], callback_data="get_playmarkup"),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+            btn(_["BACK_BUTTON"], "get_playmarkup", "backward"),
+            btn(_["CLOSE_BUTTON"], "close", "stop"),
         ],
     ]
 
@@ -68,11 +87,8 @@ def top_play_markup(_):
 def failed_top_markup(_):
     return [
         [
-            InlineKeyboardButton(
-                text=_["BACK_BUTTON"],
-                callback_data="get_top_playlists",
-            ),
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+            btn(_["BACK_BUTTON"], "get_top_playlists", "backward"),
+            btn(_["CLOSE_BUTTON"], "close", "stop"),
         ],
     ]
 
@@ -81,19 +97,22 @@ def warning_markup(_):
     return InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(
-                    text=_["PL_B_7"],
-                    callback_data="delete_whole_playlist",
+                btn(
+                    _["PL_B_7"],
+                    "delete_whole_playlist",
+                    "error",
                 ),
             ],
             [
-                InlineKeyboardButton(
-                    text=_["BACK_BUTTON"],
-                    callback_data="del_back_playlist",
+                btn(
+                    _["BACK_BUTTON"],
+                    "del_back_playlist",
+                    "backward",
                 ),
-                InlineKeyboardButton(
-                    text=_["CLOSE_BUTTON"],
-                    callback_data="close",
+                btn(
+                    _["CLOSE_BUTTON"],
+                    "close",
+                    "stop",
                 ),
             ],
         ]
@@ -104,9 +123,10 @@ def close_markup(_):
     return InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(
-                    text=_["CLOSE_BUTTON"],
-                    callback_data="close",
+                btn(
+                    _["CLOSE_BUTTON"],
+                    "close",
+                    "stop",
                 ),
             ]
         ]
