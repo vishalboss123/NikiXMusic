@@ -5,13 +5,32 @@
 TheTeamAlexa is a project of Telegram bots with variety of purposes.
 Copyright (c) 2021 ~ Present Team Alexa <https://github.com/TheTeamAlexa>
 
-This program is free software: you can redistribute it and can modify
-as you want or you can collabe if you have new ideas.
+This program is free software: you can redistribute it and modify
+as you want or collaborate if you have new ideas.
 """
 
 from typing import Union
 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from AlexaMusic.utils.stylish import EMOJI_IDS, stylish_button
+
+
+def btn(text, callback_data, emoji_name=None):
+    button_args = {
+        "text": stylish_button(text),
+        "callback_data": callback_data,
+    }
+
+    emoji_id = EMOJI_IDS.get(emoji_name) if emoji_name else None
+
+    if emoji_id:
+        button_args["icon_custom_emoji_id"] = emoji_id
+
+    try:
+        return InlineKeyboardButton(**button_args)
+    except TypeError:
+        button_args.pop("icon_custom_emoji_id", None)
+        return InlineKeyboardButton(**button_args)
 
 
 def queue_markup(
@@ -24,34 +43,41 @@ def queue_markup(
 ):
     not_dur = [
         [
-            InlineKeyboardButton(
-                text=_["QU_B_1"],
-                callback_data=f"GetQueued {CPLAY}|{videoid}",
+            btn(
+                _["QU_B_1"],
+                f"GetQueued {CPLAY}|{videoid}",
+                "queue",
             ),
-            InlineKeyboardButton(
-                text=_["CLOSEMENU_BUTTON"],
-                callback_data="close",
+            btn(
+                _["CLOSEMENU_BUTTON"],
+                "close",
+                "stop",
             ),
         ]
     ]
+
     dur = [
         [
-            InlineKeyboardButton(
-                text=_["QU_B_2"].format(played, dur),
-                callback_data="GetTimer",
+            btn(
+                _["QU_B_2"].format(played, dur),
+                "GetTimer",
+                "loading",
             )
         ],
         [
-            InlineKeyboardButton(
-                text=_["QU_B_1"],
-                callback_data=f"GetQueued {CPLAY}|{videoid}",
+            btn(
+                _["QU_B_1"],
+                f"GetQueued {CPLAY}|{videoid}",
+                "queue",
             ),
-            InlineKeyboardButton(
-                text=_["CLOSEMENU_BUTTON"],
-                callback_data="close",
+            btn(
+                _["CLOSEMENU_BUTTON"],
+                "close",
+                "stop",
             ),
         ],
     ]
+
     return InlineKeyboardMarkup(not_dur if DURATION == "Unknown" else dur)
 
 
@@ -59,14 +85,16 @@ def queue_back_markup(_, CPLAY):
     return InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(
-                    text=_["BACK_BUTTON"],
-                    callback_data=f"queue_back_timer {CPLAY}",
+                btn(
+                    _["BACK_BUTTON"],
+                    f"queue_back_timer {CPLAY}",
+                    "backward",
                 ),
-                InlineKeyboardButton(
-                    text=_["CLOSE_BUTTON"],
-                    callback_data="close",
+                btn(
+                    _["CLOSE_BUTTON"],
+                    "close",
+                    "stop",
                 ),
             ]
         ]
-    )
+)
