@@ -1,12 +1,8 @@
-# Copyright (C) 2025 by Alexa_Help @ Github, < https://github.com/TheTeamAlexa >
-# Subscribe On YT < Jankari Ki Duniya >. All rights reserved. © Alexa © Yukki.
+# Copyright (C) 2025 by Alexa_Help @ Github
+# Paggli X Music
 
 """
-TheTeamAlexa is a project of Telegram bots with variety of purposes.
-Copyright (c) 2021 ~ Present Team Alexa <https://github.com/TheTeamAlexa>
-
-This program is free software: you can redistribute it and can modify
-as you want or you can collabe if you have new ideas.
+Paggli X Music - Thumbnail Generator
 """
 
 import os
@@ -88,7 +84,9 @@ async def gen_thumb(videoid):
         name_font = ImageFont.truetype("assets/font.ttf", 30)
         para = textwrap.wrap(title, width=30)
         j = 0
-        draw.text((5, 5), "Alexa MusicBot", fill="white", font=name_font)
+
+        draw.text((5, 5), "ᴘᴀɢɢʟɪ х ᴍᴜsɪᴄ", fill="white", font=name_font)
+
         draw.text(
             (600, 150),
             "NOW PLAYING",
@@ -130,7 +128,12 @@ async def gen_thumb(videoid):
             (255, 255, 255),
             font=arial,
         )
-        draw.text((600, 550), "Owner : Jankari Ki Duniya", (255, 255, 255), font=arial)
+        draw.text(
+            (600, 550),
+            "ᴅᴇᴠᴇʟᴏᴘᴇʀ : @YTT_BISHAL",
+            (255, 255, 255),
+            font=arial,
+        )
         try:
             os.remove(f"cache/thumb{videoid}.png")
         except Exception:
@@ -199,7 +202,9 @@ async def gen_qthumb(videoid):
         name_font = ImageFont.truetype("assets/font.ttf", 30)
         para = textwrap.wrap(title, width=30)
         j = 0
-        draw.text((5, 5), "Alexa MusicBot", fill="white", font=name_font)
+
+        draw.text((5, 5), "ᴘᴀɢɢʟɪ х ᴍᴜsɪᴄ", fill="white", font=name_font)
+
         draw.text(
             (600, 150),
             "ADDED THIS SONG IN QUEUE",
@@ -241,7 +246,12 @@ async def gen_qthumb(videoid):
             (255, 255, 255),
             font=arial,
         )
-        draw.text((600, 550), "Owner : Jankari Ki Duniya", (255, 255, 255), font=arial)
+        draw.text(
+            (600, 550),
+            "ᴅᴇᴠᴇʟᴏᴘᴇʀ : @YTT_BISHAL",
+            (255, 255, 255),
+            font=arial,
+        )
         try:
             os.remove(f"cache/thumb{videoid}.png")
         except Exception:
