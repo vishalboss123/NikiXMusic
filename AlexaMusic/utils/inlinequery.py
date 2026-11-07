@@ -1,50 +1,66 @@
-# Copyright (C) 2025 by Alexa_Help @ Github, < https://github.com/TheTeamAlexa >
-# Subscribe On YT < Jankari Ki Duniya >. All rights reserved. © Alexa © Yukki.
+# Copyright (C) 2025 by Alexa_Help @ Github
+# Original project credits: Team Alexa © Yukki.
 
 """
-TheTeamAlexa is a project of Telegram bots with variety of purposes.
-Copyright (c) 2021 ~ Present Team Alexa <https://github.com/TheTeamAlexa>
-
-This program is free software: you can redistribute it and can modify
-as you want or you can collabe if you have new ideas.
+Paggli X Music
+Based on TheTeamAlexa Telegram Music Bot.
 """
 
 from pyrogram.types import InlineQueryResultArticle, InputTextMessageContent
 
+from AlexaMusic.utils.stylish import EMOJI_IDS, stylish_button
+
+
+def get_emoji(name):
+    return EMOJI_IDS.get(name, "")
+
+
 answer = [
     InlineQueryResultArticle(
-        title="🙄 ᴩᴀᴜsᴇ 🙄",
-        description="ᴩᴀᴜsᴇ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴩʟᴀʏɪɴɢ sᴛʀᴇᴀᴍ ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ.",
+        title=f"{get_emoji('pause')} {stylish_button('Pause')}",
+        description=stylish_button(
+            "Pause the current playing stream on videochat."
+        ),
         thumb_url="https://telegra.ph/file/9006f077e6596772e5864.jpg",
         input_message_content=InputTextMessageContent("/pause"),
     ),
     InlineQueryResultArticle(
-        title="😋 ʀᴇsᴜᴍᴇ 😋",
-        description="ʀᴇsᴜᴍᴇ ᴛʜᴇ ᴩᴀᴜsᴇᴅ sᴛʀᴇᴀᴍ ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ.",
+        title=f"{get_emoji('play')} {stylish_button('Resume')}",
+        description=stylish_button(
+            "Resume the paused stream on videochat."
+        ),
         thumb_url="https://telegra.ph/file/9006f077e6596772e5864.jpg",
         input_message_content=InputTextMessageContent("/resume"),
     ),
     InlineQueryResultArticle(
-        title="🙂 sᴋɪᴩ 🙂",
-        description="sᴋɪᴩ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴩʟᴀʏɪɴɢ sᴛʀᴇᴀᴍ ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ ᴀɴᴅ ᴍᴏᴠᴇs ᴛᴏ ᴛʜᴇ ɴᴇxᴛ sᴛʀᴇᴀᴍ.",
+        title=f"{get_emoji('next')} {stylish_button('Skip')}",
+        description=stylish_button(
+            "Skip the current playing stream on videochat and move to the next stream."
+        ),
         thumb_url="https://telegra.ph/file/9006f077e6596772e5864.jpg",
         input_message_content=InputTextMessageContent("/skip"),
     ),
     InlineQueryResultArticle(
-        title="🥺 ᴇɴᴅ 🥺",
-        description="ᴇɴᴅ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴩʟᴀʏɪɴɢ sᴛʀᴇᴀᴍ ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ.",
+        title=f"{get_emoji('stop')} {stylish_button('End')}",
+        description=stylish_button(
+            "End the current playing stream on videochat."
+        ),
         thumb_url="https://telegra.ph/file/9006f077e6596772e5864.jpg",
         input_message_content=InputTextMessageContent("/end"),
     ),
     InlineQueryResultArticle(
-        title="🥴 sʜᴜғғʟᴇ 🥴",
-        description="sʜᴜғғʟᴇ ᴛʜᴇ ǫᴜᴇᴜᴇᴅ sᴏɴɢs ɪɴ ᴩʟᴀʏʟɪsᴛ.",
+        title=f"{get_emoji('repeat')} {stylish_button('Shuffle')}",
+        description=stylish_button(
+            "Shuffle the queued songs in playlist."
+        ),
         thumb_url="https://telegra.ph/file/9006f077e6596772e5864.jpg",
         input_message_content=InputTextMessageContent("/shuffle"),
     ),
     InlineQueryResultArticle(
-        title="🥱 ʟᴏᴏᴩ 🥱",
-        description="ʟᴏᴏᴩ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴩʟᴀʏɪɴɢ ᴛʀᴀᴄᴋ ᴏɴ ᴠɪᴅᴇᴏᴄʜᴀᴛ.",
+        title=f"{get_emoji('repeat')} {stylish_button('Loop')}",
+        description=stylish_button(
+            "Loop the current playing track on videochat."
+        ),
         thumb_url="https://telegra.ph/file/9006f077e6596772e5864.jpg",
         input_message_content=InputTextMessageContent("/loop 3"),
     ),
