@@ -1,12 +1,12 @@
 # Copyright (C) 2025 by Alexa_Help @ Github, < https://github.com/TheTeamAlexa >
-# Subscribe On YT < Jankari Ki Duniya >. All rights reserved. © Alexa © Yukki.
+# Modified Branding: Paggli X Music
+# Original project credits belong to their respective authors.
 
 """
 TheTeamAlexa is a project of Telegram bots with variety of purposes.
-Copyright (c) 2021 ~ Present Team Alexa <https://github.com/TheTeamAlexa>
+Copyright (c) 2021 ~ Present Team Alexa.
 
-This program is free software: you can redistribute it and can modify
-as you want or you can collabe if you have new ideas.
+Paggli X Music Custom Branding.
 """
 
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -15,6 +15,7 @@ from config import SUPPORT_GROUP, adminlist
 from strings import get_string
 from AlexaMusic import app
 from AlexaMusic.misc import SUDOERS
+from AlexaMusic.utils.stylish import stylish_button, EMOJI_IDS
 from AlexaMusic.utils.database import (
     get_authuser_names,
     get_cmode,
@@ -27,12 +28,50 @@ from AlexaMusic.utils.database import (
 from ..formatters import int_to_alpha
 
 
+# ==========================================
+#          PAGGLI X MUSIC EMOJI
+# ==========================================
+
+def premium_emoji(name, fallback="✨"):
+    emoji_id = EMOJI_IDS.get(name)
+
+    if not emoji_id:
+        return fallback
+
+    return f'<tg-emoji emoji-id="{emoji_id}">{fallback}</tg-emoji>'
+
+
+def stylish_text(text):
+    return stylish_button(text)
+
+
+def maintenance_text():
+    return (
+        f'{premium_emoji("warning", "⚠️")} '
+        f'<b>{app.mention}</b> '
+        f'ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ.\n\n'
+        f'{premium_emoji("info", "ℹ️")} '
+        f'ᴠɪsɪᴛ <a href="{SUPPORT_GROUP}">'
+        f'sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ</a> ғᴏʀ ᴍᴏʀᴇ ɪɴғᴏ.'
+    )
+
+
+# ==========================================
+#            ADMIN RIGHTS CHECK
+# ==========================================
+
 def AdminRightsCheck(mystic):
+
     async def wrapper(client, message):
-        if await is_maintenance() is False and message.from_user.id not in SUDOERS:
+
+        if (
+            await is_maintenance() is False
+            and message.from_user.id not in SUDOERS
+        ):
             return await message.reply_text(
-                text=f"{app.mention} ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ, ᴠɪsɪᴛ <a href={SUPPORT_GROUP}>sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ</a> ғᴏʀ ᴋɴᴏᴡɪɴɢ ᴛʜᴇ ʀᴇᴀsᴏɴ.",
+                text=maintenance_text(),
                 disable_web_page_preview=True,
+                parse_mode="html",
             )
 
         try:
@@ -45,48 +84,77 @@ def AdminRightsCheck(mystic):
             _ = get_string(language)
         except Exception:
             _ = get_string("en")
+
         if message.sender_chat:
+
             upl = InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
-                            text="ʜᴏᴡ ᴛᴏ ғɪx ᴛʜɪs ?",
+                            text=f"✨ {stylish_text('How To Fix This?')} ✨",
                             callback_data="AnonymousAdmin",
+                            style="success",
                         ),
                     ]
                 ]
             )
-            return await message.reply_text(_["general_4"], reply_markup=upl)
+
+            return await message.reply_text(
+                _["general_4"],
+                reply_markup=upl,
+            )
+
         if message.command[0][0] == "c":
+
             chat_id = await get_cmode(message.chat.id)
+
             if chat_id is None:
                 return await message.reply_text(_["setting_12"])
+
             try:
                 await app.get_chat(chat_id)
             except Exception:
                 return await message.reply_text(_["cplay_4"])
+
         else:
             chat_id = message.chat.id
+
         if not await is_active_chat(chat_id):
             return await message.reply_text(_["general_6"])
+
         is_non_admin = await is_nonadmin_chat(message.chat.id)
+
         if not is_non_admin and message.from_user.id not in SUDOERS:
+
             admins = adminlist.get(message.chat.id)
+
             if not admins:
                 return await message.reply_text(_["admin_18"])
+
             if message.from_user.id not in admins:
                 return await message.reply_text(_["admin_19"])
+
         return await mystic(client, message, _, chat_id)
 
     return wrapper
 
 
+# ==========================================
+#               ACTUAL ADMIN
+# ==========================================
+
 def AdminActual(mystic):
+
     async def wrapper(client, message):
-        if await is_maintenance() is False and message.from_user.id not in SUDOERS:
+
+        if (
+            await is_maintenance() is False
+            and message.from_user.id not in SUDOERS
+        ):
             return await message.reply_text(
-                text=f"{app.mention} ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ, ᴠɪsɪᴛ <a href={SUPPORT_GROUP}>sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ</a> ғᴏʀ ᴋɴᴏᴡɪɴɢ ᴛʜᴇ ʀᴇᴀsᴏɴ.",
+                text=maintenance_text(),
                 disable_web_page_preview=True,
+                parse_mode="html",
             )
 
         try:
@@ -99,77 +167,117 @@ def AdminActual(mystic):
             _ = get_string(language)
         except Exception:
             _ = get_string("en")
+
         if message.sender_chat:
+
             upl = InlineKeyboardMarkup(
                 [
                     [
                         InlineKeyboardButton(
-                            text="ʜᴏᴡ ᴛᴏ ғɪx ᴛʜɪs ?",
+                            text=f"✨ {stylish_text('How To Fix This?')} ✨",
                             callback_data="AnonymousAdmin",
+                            style="success",
                         ),
                     ]
                 ]
             )
-            return await message.reply_text(_["general_4"], reply_markup=upl)
+
+            return await message.reply_text(
+                _["general_4"],
+                reply_markup=upl,
+            )
+
         if message.from_user.id not in SUDOERS:
+
             try:
                 member = await app.get_chat_member(
-                    message.chat.id, message.from_user.id
+                    message.chat.id,
+                    message.from_user.id,
                 )
+
                 if (
                     member.status != ChatMemberStatus.ADMINISTRATOR
                     and not member.privileges.can_manage_video_chats
                 ):
                     return await message.reply(_["general_5"])
+
             except Exception as e:
                 return await message.reply(f"Error: {str(e)}")
+
         return await mystic(client, message, _)
 
     return wrapper
 
 
+# ==========================================
+#          ACTUAL ADMIN CALLBACK
+# ==========================================
+
 def ActualAdminCB(mystic):
+
     async def wrapper(client, CallbackQuery):
+
         if (
             await is_maintenance() is False
             and CallbackQuery.from_user.id not in SUDOERS
         ):
             return await CallbackQuery.answer(
-                f"{app.mention} ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ, ᴠɪsɪᴛ sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ ғᴏʀ ᴋɴᴏᴡɪɴɢ ᴛʜᴇ ʀᴇᴀsᴏɴ.",
+                f"⚠️ {app.mention} ɪs ᴜɴᴅᴇʀ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ. "
+                f"ᴠɪsɪᴛ sᴜᴘᴘᴏʀᴛ ᴄʜᴀᴛ ғᴏʀ ᴍᴏʀᴇ ɪɴғᴏ.",
                 show_alert=True,
             )
+
         try:
             language = await get_lang(CallbackQuery.message.chat.id)
             _ = get_string(language)
         except Exception:
             _ = get_string("en")
+
         if CallbackQuery.message.chat.type == ChatType.PRIVATE:
             return await mystic(client, CallbackQuery, _)
-        is_non_admin = await is_nonadmin_chat(CallbackQuery.message.chat.id)
+
+        is_non_admin = await is_nonadmin_chat(
+            CallbackQuery.message.chat.id
+        )
+
         if not is_non_admin:
+
             try:
                 a = await app.get_chat_member(
                     CallbackQuery.message.chat.id,
                     CallbackQuery.from_user.id,
                 )
+
                 if a.status != ChatMemberStatus.ADMINISTRATOR:
+
                     if not a.privileges.can_manage_video_chats:
+
                         if CallbackQuery.from_user.id not in SUDOERS:
-                            token = await int_to_alpha(CallbackQuery.from_user.id)
+
+                            token = await int_to_alpha(
+                                CallbackQuery.from_user.id
+                            )
+
                             _check = await get_authuser_names(
                                 CallbackQuery.from_user.id
                             )
+
                             if token not in _check:
                                 return await CallbackQuery.answer(
                                     _["general_5"],
                                     show_alert=True,
                                 )
+
                     elif a is None:
                         return await CallbackQuery.answer(
                             "You are not a member of this chat."
                         )
+
             except Exception as e:
-                return await CallbackQuery.answer(f"Error: {str(e)}")
+                return await CallbackQuery.answer(
+                    f"Error: {str(e)}"
+                )
+
         return await mystic(client, CallbackQuery, _)
 
     return wrapper
